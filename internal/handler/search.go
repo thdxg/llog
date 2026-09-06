@@ -4,12 +4,13 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/sahilm/fuzzy"
+	"github.com/spf13/cobra"
 	"github.com/thdxg/llog/internal/config"
 	_db "github.com/thdxg/llog/internal/db"
 	"github.com/thdxg/llog/internal/logger"
 	"github.com/thdxg/llog/internal/model"
-	"github.com/sahilm/fuzzy"
-	"github.com/spf13/cobra"
+	"github.com/thdxg/llog/internal/view"
 )
 
 func Search(cfg *config.Config, db *_db.DB, opts *SearchOpts) HandlerFunc {
@@ -28,10 +29,13 @@ func Search(cfg *config.Config, db *_db.DB, opts *SearchOpts) HandlerFunc {
 
 		res := fuzzy.FindFrom(input, entrySlice(entries))
 
-		for _, r := range res {
-
-			fmt.Println(entries[r.Index])
+		matched := make([]model.Entry, len(res))
+		for i, r := range res {
+			matched[i] = entries[r.Index]
 		}
+
+		view.PrintEntries(cfg, matched)
+		view.PrintSearch(len(matched))
 
 		return nil
 	}
