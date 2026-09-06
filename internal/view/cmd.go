@@ -14,6 +14,10 @@ func PrintDelete(count int) {
 	fmt.Println(entryAction(count, "deleted"))
 }
 
+func PrintSearch(count int) {
+	fmt.Println(entryAction(count, "found"))
+}
+
 func PrintSummarize(count int) {
 	fmt.Println(entryAction(count, "summarized"))
 }
